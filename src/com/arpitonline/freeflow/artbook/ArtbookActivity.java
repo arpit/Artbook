@@ -12,7 +12,7 @@ import android.view.View;
 import android.view.View.OnClickListener;
 
 import com.arpitonline.freeflow.artbook.data.DribbbleDataAdapter;
-import com.arpitonline.freeflow.artbook.layouts.ArtbookLayout;
+import com.arpitonline.freeflow.artbook.layouts.DribbbleQuiltLayout;
 import com.arpitonline.freeflow.artbook.models.DribbbleFeed;
 import com.arpitonline.freeflow.artbook.models.DribbbleFetch;
 import com.comcast.freeflow.core.AbsLayoutContainer;
@@ -31,7 +31,7 @@ public class ArtbookActivity extends Activity implements OnClickListener{
 
 	private FreeFlowContainer container;
 	private VGridLayout grid;
-	private ArtbookLayout custom;
+	private DribbbleQuiltLayout custom;
 
 	private DribbbleFetch fetch;
 	private int itemsPerPage = 25;
@@ -49,18 +49,30 @@ public class ArtbookActivity extends Activity implements OnClickListener{
 		
 
 		container = (FreeFlowContainer) findViewById(R.id.container);
+		
+		CardIncomingAnimation anim = new CardIncomingAnimation();
+		
+		anim.animateIndividualCellsSequentially = false;
+		anim.animateAllSetsSequentially = false;
+		anim.oldCellsRemovalAnimationDuration = 300;
+		anim.newCellsAdditionAnimationDurationPerCell = 300;
+		anim.cellPositionTransitionAnimationDuration = 250;
+
+		
+		container.setLayoutAnimator(anim);
 
 		Display display = getWindowManager().getDefaultDisplay();
 		Point size = new Point();
 		display.getSize(size);
 		
 		findViewById(R.id.load_more).setOnClickListener(this);
-		//Our new layout
-		custom = new ArtbookLayout();
-		
-		//Grid Layout
+		custom = new DribbbleQuiltLayout();
 		grid = new VGridLayout();
-		VGridLayout.LayoutParams params = new VGridLayout.LayoutParams(size.x/2, size.x/2);
+		
+		int columnCount = getResources().getInteger(R.integer.column_count);
+		
+		VGridLayout.LayoutParams params = new VGridLayout.LayoutParams(size.x/columnCount, 
+				(int)(  (size.x/columnCount) *0.75 ));
 		grid.setLayoutParams(params);
 		
 		//Vertical Layout
@@ -73,7 +85,7 @@ public class ArtbookActivity extends Activity implements OnClickListener{
 		hlayout.setLayoutParams(new HLayout.LayoutParams(size.x));
 		
 		
-		layouts = new FreeFlowLayout[]{custom, grid, vlayout, hlayout};
+		layouts = new FreeFlowLayout[]{ grid, vlayout, custom};
 		
 		adapter = new DribbbleDataAdapter(this);
 		

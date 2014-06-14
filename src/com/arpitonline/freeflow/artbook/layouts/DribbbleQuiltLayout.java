@@ -15,19 +15,23 @@ import com.comcast.freeflow.layouts.FreeFlowLayout.FreeFlowLayoutParams;
 import com.comcast.freeflow.layouts.FreeFlowLayoutBase;
 import com.comcast.freeflow.utils.ViewUtils;
 
-public class ArtbookLayout extends FreeFlowLayoutBase implements FreeFlowLayout {
+public class DribbbleQuiltLayout extends FreeFlowLayoutBase implements FreeFlowLayout {
 
 	private static final String TAG = "ArtbookLayout";
 
-	private int largeItemSide;
-	private int regularItemSide;
+	private int largeItemWidth;
+	private int largeItemHeight;
+	private int regularItemWidth;
+	private int regularItemHeight;
 
 
 	@Override
 	public void setDimensions(int measuredWidth, int measuredHeight) {
 		super.setDimensions(measuredWidth, measuredHeight);
-		largeItemSide = measuredWidth / 2;
-		regularItemSide = measuredWidth / 4;
+		largeItemWidth = measuredWidth / 2;
+		largeItemHeight = (int)(0.75 * largeItemWidth);
+		regularItemWidth = measuredWidth / 4;
+		regularItemHeight = ((int)(0.75 * regularItemWidth));
 
 	}
 
@@ -55,58 +59,58 @@ public class ArtbookLayout extends FreeFlowLayoutBase implements FreeFlowLayout 
 			switch (i % 5) {
 			case (0):
 				r.left = 0;
-				r.top = rowIndex * largeItemSide;
-				r.right = largeItemSide;
-				r.bottom = r.top + largeItemSide;
+				r.top = rowIndex * largeItemHeight;
+				r.right = largeItemWidth;
+				r.bottom = r.top + largeItemHeight;
 				
 				if(rowIndex % 2 != 0){
-					r.offset(largeItemSide, 0);
+					r.offset(largeItemWidth, 0);
 				}
 				
 				
 				break;
 
 			case (1):
-				r.left = largeItemSide;
-				r.right = largeItemSide + regularItemSide;
-				r.top = rowIndex * largeItemSide;
-				r.bottom = r.top + regularItemSide;
+				r.left = largeItemWidth;
+				r.right = largeItemWidth + regularItemWidth;
+				r.top = rowIndex * largeItemHeight;
+				r.bottom = r.top + regularItemHeight;
 				
 				if(rowIndex % 2 != 0){
-					r.offset(-largeItemSide, 0);
+					r.offset(-largeItemWidth, 0);
 				}
 				
 				break;
 
 			case (2):
-				r.left = 3 * regularItemSide;
+				r.left = 3 * regularItemWidth;
 				r.right = width;
-				r.top = rowIndex * largeItemSide;
-				r.bottom = r.top + regularItemSide;
+				r.top = rowIndex * largeItemHeight;
+				r.bottom = r.top + regularItemHeight;
 				
 				if(rowIndex % 2 != 0){
-					r.offset(-largeItemSide, 0);
+					r.offset(-largeItemWidth, 0);
 				}
 				
 				break;
 
 			case (3):
-				r.left = largeItemSide;
-				r.right = largeItemSide + regularItemSide;
-				r.top = rowIndex * largeItemSide + regularItemSide;
-				r.bottom = r.top + regularItemSide;
+				r.left = largeItemWidth;
+				r.right = largeItemWidth + regularItemWidth;
+				r.top = rowIndex * largeItemHeight + regularItemHeight;
+				r.bottom = r.top + regularItemHeight;
 				if(rowIndex % 2 != 0){
-					r.offset(-largeItemSide, 0);
+					r.offset(-largeItemWidth, 0);
 				}
 				break;
 
 			case (4):
-				r.left = 3 * regularItemSide;
+				r.left = 3 * regularItemWidth;
 				r.right = width;
-				r.top = rowIndex * largeItemSide + regularItemSide;
-				r.bottom = r.top + regularItemSide;
+				r.top = rowIndex * largeItemHeight + regularItemHeight;
+				r.bottom = r.top + regularItemHeight;
 				if(rowIndex % 2 != 0){
-					r.offset(-largeItemSide, 0);
+					r.offset(-largeItemWidth, 0);
 				}
 				break;
 
@@ -155,7 +159,7 @@ public class ArtbookLayout extends FreeFlowLayoutBase implements FreeFlowLayout 
 
 	@Override
 	public int getContentHeight() {
-		return s.getDataCount() / 5 * largeItemSide;
+		return s.getDataCount() / 5 * largeItemHeight;
 	}
 
 	@Override
