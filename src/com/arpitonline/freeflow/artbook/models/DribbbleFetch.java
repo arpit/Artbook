@@ -23,7 +23,7 @@ public class DribbbleFetch {
 	public static final String TAG = "DribbbleFetch";
 
 	
-	public void load(final ArtbookActivity caller, int itemsPerPage, int page) {
+	public void load(final ArtbookActivity caller, String url) {
 		
 		new AsyncTask<String, Void, String>() {
 
@@ -44,6 +44,9 @@ public class DribbbleFetch {
 
 			protected void onPostExecute(String data) {
 				DribbbleFeed feed  = new Gson().fromJson(data, DribbbleFeed.class);
+				if(feed == null){
+					caller.onDataFailed();
+				}
 				caller.onDataLoaded(feed);
 			}
 
@@ -69,7 +72,17 @@ public class DribbbleFetch {
 				return out.toByteArray();
 			}
 
-		}.execute("http://api.dribbble.com/shots/popular?per_page="+itemsPerPage+"&page="+page);
+		}.execute(url);
+	}
+	
+	public static String getPopularURL(int itemsPerPage, int pageIndex){
+		return "http://api.dribbble.com/shots/popular?per_page="+itemsPerPage+"&page="+pageIndex;
+	}
+	public static String getEveryoneURL(int itemsPerPage, int pageIndex){
+		return "http://api.dribbble.com/shots/everyone?per_page="+itemsPerPage+"&page="+pageIndex;
+	}
+	public static String getDebutsURL(int itemsPerPage, int pageIndex){
+		return "http://api.dribbble.com/shots/debuts?per_page="+itemsPerPage+"&page="+pageIndex;
 	}
 
 }

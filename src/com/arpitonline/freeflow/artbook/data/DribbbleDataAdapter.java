@@ -48,6 +48,10 @@ public class DribbbleDataAdapter implements SectionedAdapter {
 		Log.d(TAG, "Data updated to: "+section.getDataCount());
 		
 	}
+	
+	public void clear(){
+		section.clearData();
+	}
 
 	@Override
 	public long getItemId(int section, int position) {

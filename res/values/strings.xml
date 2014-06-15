@@ -21,5 +21,7 @@
     <string name="github_link_text">Github link</string>
     <string name="action_about">About</string>
     <string name="change_layout">Change Layout</string>
+    <string name="open_drawer">Open Drawer</string>
+    <string name="close_drawer">Close Drawer</string>
 
 </resources>
