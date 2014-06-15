@@ -1,26 +1,39 @@
 package com.arpitonline.freeflow.artbook;
 
+import android.animation.Animator;
+import android.animation.Animator.AnimatorListener;
 import android.app.Activity;
 import android.content.Intent;
+import android.graphics.Color;
 import android.graphics.Point;
 import android.os.Bundle;
 import android.support.v4.app.ActionBarDrawerToggle;
 import android.support.v4.widget.DrawerLayout;
 import android.util.Log;
 import android.view.Display;
+import android.view.Gravity;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.Choreographer.FrameCallback;
 import android.view.View.OnClickListener;
+import android.view.ViewGroup;
+import android.view.ViewGroup.LayoutParams;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.FrameLayout;
+import android.widget.ImageView;
 import android.widget.ListView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.arpitonline.freeflow.artbook.data.DribbbleDataAdapter;
 import com.arpitonline.freeflow.artbook.layouts.DribbbleQuiltLayout;
 import com.arpitonline.freeflow.artbook.models.DribbbleFeed;
 import com.arpitonline.freeflow.artbook.models.DribbbleFetch;
+import com.arpitonline.freeflow.artbook.models.Shot;
+import com.comcast.freeflow.animations.interpolators.EaseInOutQuintInterpolator;
 import com.comcast.freeflow.core.AbsLayoutContainer;
 import com.comcast.freeflow.core.AbsLayoutContainer.OnItemClickListener;
 import com.comcast.freeflow.core.FreeFlowContainer;
@@ -30,11 +43,15 @@ import com.comcast.freeflow.layouts.FreeFlowLayout;
 import com.comcast.freeflow.layouts.HLayout;
 import com.comcast.freeflow.layouts.VGridLayout;
 import com.comcast.freeflow.layouts.VLayout;
+import com.comcast.freeflow.utils.ViewUtils;
+import com.squareup.picasso.Picasso;
 
-public class ArtbookActivity extends Activity implements OnClickListener, android.widget.AdapterView.OnItemClickListener {
+public class ArtbookActivity extends Activity implements OnClickListener,
+		android.widget.AdapterView.OnItemClickListener, OnItemClickListener {
 
 	public static final String TAG = "ArtbookActivity";
 
+	private FrameLayout containerFrame;
 	private FreeFlowContainer container;
 	private VGridLayout grid;
 	private DribbbleQuiltLayout custom;
@@ -49,6 +66,8 @@ public class ArtbookActivity extends Activity implements OnClickListener, androi
 
 	DribbbleDataAdapter adapter;
 
+	ViewGroup detailsView;
+
 	FreeFlowLayout[] layouts;
 	int currLayoutIndex = 0;
 
@@ -59,6 +78,7 @@ public class ArtbookActivity extends Activity implements OnClickListener, androi
 
 		mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
 		mDrawerList = (ListView) findViewById(R.id.left_drawer);
+		containerFrame = (FrameLayout) findViewById(R.id.frame);
 		container = (FreeFlowContainer) findViewById(R.id.container);
 		getActionBar().setDisplayHomeAsUpEnabled(true);
 		getActionBar().setHomeButtonEnabled(true);
@@ -67,17 +87,18 @@ public class ArtbookActivity extends Activity implements OnClickListener, androi
 				R.string.close_drawer) {
 			public void onDrawerClosed(View view) {
 				// getActionBar().setTitle(mTitle);
-				invalidateOptionsMenu(); 
+				invalidateOptionsMenu();
 			}
 
 			public void onDrawerOpened(View drawerView) {
 				// getActionBar().setTitle(mDrawerTitle);
-				invalidateOptionsMenu(); 
+				invalidateOptionsMenu();
 			}
 		};
 		mDrawerLayout.setDrawerListener(mDrawerToggle);
 		mDrawerList.setAdapter(new ArrayAdapter<String>(this,
-                R.layout.drawer_list_item, new String[]{"Popular","Everyone","Debuts"}));
+				R.layout.drawer_list_item, new String[] { "Popular",
+						"Everyone", "Debuts" }));
 		mDrawerList.setOnItemClickListener(this);
 		CardIncomingAnimation anim = new CardIncomingAnimation();
 
@@ -103,52 +124,57 @@ public class ArtbookActivity extends Activity implements OnClickListener, androi
 				/ columnCount, (int) ((size.x / columnCount) * 0.75));
 		grid.setLayoutParams(params);
 
-		// Vertical Layout
-		VLayout vlayout = new VLayout();
-		VLayout.LayoutParams params2 = new VLayout.LayoutParams(size.x);
-		vlayout.setLayoutParams(params2);
-
-		// HLayout
-		HLayout hlayout = new HLayout();
-		hlayout.setLayoutParams(new HLayout.LayoutParams(size.x));
-
-		layouts = new FreeFlowLayout[] { grid, vlayout, custom };
+		layouts = new FreeFlowLayout[] { grid, custom };
 
 		adapter = new DribbbleDataAdapter(this);
 
 		container.setLayout(layouts[currLayoutIndex]);
+		container.setOnItemClickListener(this);
 		container.setAdapter(adapter);
 		fetch = new DribbbleFetch();
 		selectSource(0);
 
+		if (1 == 1) {
+			detailsView = (ViewGroup) LayoutInflater.from(this).inflate(
+					R.layout.shot_details, null);
+			
+			FrameLayout.LayoutParams fl = new FrameLayout.LayoutParams((int) ViewUtils.dipToPixels(this, 760),
+					
+					FrameLayout.LayoutParams.WRAP_CONTENT );
+			fl.gravity = Gravity.CENTER;
+			detailsView.setLayoutParams(fl);
+			containerFrame.addView(detailsView);
+			detailsView.setVisibility(View.GONE);
+
+		}
+
 	}
-	
-	private void selectSource(int idx){
+
+	private void selectSource(int idx) {
 		String url = "";
 		adapter.clear();
-		switch(idx){
-		case 0 : url = DribbbleFetch.getPopularURL(itemsPerPage, pageIndex); break;
-		case 1 : url = DribbbleFetch.getEveryoneURL(itemsPerPage, pageIndex); break;
-		case 2 : url = DribbbleFetch.getDebutsURL(itemsPerPage, pageIndex); break;
+		switch (idx) {
+		case 0:
+			url = DribbbleFetch.getPopularURL(itemsPerPage, pageIndex);
+			break;
+		case 1:
+			url = DribbbleFetch.getEveryoneURL(itemsPerPage, pageIndex);
+			break;
+		case 2:
+			url = DribbbleFetch.getDebutsURL(itemsPerPage, pageIndex);
+			break;
 		}
-		
-		Log.d(TAG, "Loading: "+url);
+
+		Log.d(TAG, "Loading: " + url);
 
 		fetch.load(this, url);
 	}
 
 	public void onDataLoaded(DribbbleFeed feed) {
-		Log.d(TAG, "Feed: "+feed.getShots());
+		Log.d(TAG, "Feed: " + feed.getShots());
 		Log.d(TAG, "photo: " + feed.getShots().get(0).getImage_teaser_url());
 		adapter.update(feed);
 		container.dataInvalidated();
-		container.setOnItemClickListener(new OnItemClickListener() {
-			@Override
-			public void onItemClick(AbsLayoutContainer parent,
-					FreeFlowItem proxy) {
-
-			}
-		});
 
 		container.addScrollListener(new OnScrollListener() {
 
@@ -191,12 +217,12 @@ public class ArtbookActivity extends Activity implements OnClickListener, androi
 		return true;
 
 	}
-	
+
 	@Override
-    protected void onPostCreate(Bundle savedInstanceState) {
-        super.onPostCreate(savedInstanceState);
-        mDrawerToggle.syncState();
-    }
+	protected void onPostCreate(Bundle savedInstanceState) {
+		super.onPostCreate(savedInstanceState);
+		mDrawerToggle.syncState();
+	}
 
 	@Override
 	public void onClick(View v) {
@@ -211,8 +237,65 @@ public class ArtbookActivity extends Activity implements OnClickListener, androi
 		selectSource(position);
 		mDrawerLayout.closeDrawers();
 	}
-	
-	public void onDataFailed(){
-		Toast.makeText(this, "Error loading Dribbble data", Toast.LENGTH_SHORT).show();
+
+	public void onDataFailed() {
+		Toast.makeText(this, "Error loading Dribbble data", Toast.LENGTH_SHORT)
+				.show();
+	}
+
+	@Override
+	public void onItemClick(AbsLayoutContainer parent, FreeFlowItem proxy) {
+
+		Shot s = (Shot) adapter.getSection(0).getDataAtIndex(proxy.itemIndex);
+
+		ImageView imgView = (ImageView) detailsView.findViewById(R.id.shot_img);
+		detailsView.findViewById(R.id.details_done).setOnClickListener(
+				new View.OnClickListener() {
+
+					@Override
+					public void onClick(View v) {
+						detailsView
+								.animate()
+								.translationY(2*containerFrame.getHeight())
+								.setDuration(500)
+								.setInterpolator(
+										new EaseInOutQuintInterpolator()).setListener(new AnimatorListener() {
+											
+											@Override
+											public void onAnimationStart(Animator animation) {
+												
+											}
+											
+											@Override
+											public void onAnimationRepeat(Animator animation) {
+												
+											}
+											
+											@Override
+											public void onAnimationEnd(Animator animation) {
+												detailsView.setVisibility(View.GONE);
+												detailsView.setTranslationY(0);
+												detailsView.animate().setListener(null);
+											}
+											
+											@Override
+											public void onAnimationCancel(Animator animation) {
+												
+											}
+										});
+					}
+				});
+
+		((TextView) detailsView.findViewById(R.id.shot_title)).setText(s
+				.getTitle());
+		// ((TextView)detailsView.findViewById(R.id.shot_desc)).setText(s.get);
+
+		Picasso.with(this).load(s.getImage_url()).into(imgView);
+		detailsView.setTranslationY(2 * containerFrame.getHeight());
+		detailsView.setRotation(45f);
+		detailsView.setVisibility(View.VISIBLE);
+		detailsView.animate().translationY(0).rotation(0).setDuration(500)
+				.setInterpolator(new EaseInOutQuintInterpolator());
+
 	}
 }
