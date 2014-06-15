@@ -165,17 +165,12 @@ public class ArtbookActivity extends Activity implements OnClickListener,
 			break;
 		}
 
-		Log.d(TAG, "Loading: " + url);
-
 		fetch.load(this, url);
 	}
 
 	public void onDataLoaded(DribbbleFeed feed) {
-		Log.d(TAG, "Feed: " + feed.getShots());
-		Log.d(TAG, "photo: " + feed.getShots().get(0).getImage_teaser_url());
 		adapter.update(feed);
 		container.dataInvalidated();
-
 		container.addScrollListener(new OnScrollListener() {
 
 			@Override
