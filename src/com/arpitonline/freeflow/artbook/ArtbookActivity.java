@@ -52,6 +52,7 @@ public class ArtbookActivity extends Activity implements OnClickListener,
 	public static final String TAG = "ArtbookActivity";
 
 	private FrameLayout containerFrame;
+	private View loadingIndicator;
 	private FreeFlowContainer container;
 	private VGridLayout grid;
 	private DribbbleQuiltLayout custom;
@@ -75,7 +76,8 @@ public class ArtbookActivity extends Activity implements OnClickListener,
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_artbook);
-
+		
+		loadingIndicator = findViewById(R.id.loading);
 		mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
 		mDrawerList = (ListView) findViewById(R.id.left_drawer);
 		containerFrame = (FrameLayout) findViewById(R.id.frame);
@@ -155,12 +157,49 @@ public class ArtbookActivity extends Activity implements OnClickListener,
 				if(container.getScrollPercentY() > .95 && !fetch.isLoading()){
 					
 					pageIndex++;
+					showLoading();
 					fetch.load(ArtbookActivity.this, DribbbleFetch.getPopularURL(itemsPerPage, pageIndex));
 		
 				}
 			}
 		});
 
+	}
+	
+	private void showLoading(){
+		loadingIndicator.setVisibility(View.VISIBLE);
+		loadingIndicator.setTranslationY(loadingIndicator.getHeight());
+		loadingIndicator.animate().translationY(0).setDuration(250);
+	}
+	private void hideLoading(){
+		loadingIndicator.animate().translationY(loadingIndicator.getHeight()).setDuration(250).setListener(new AnimatorListener() {
+			
+			@Override
+			public void onAnimationStart(Animator animation) {
+				// TODO Auto-generated method stub
+				
+			}
+			
+			@Override
+			public void onAnimationRepeat(Animator animation) {
+				// TODO Auto-generated method stub
+				
+			}
+			
+			@Override
+			public void onAnimationEnd(Animator animation) {
+				loadingIndicator.setVisibility(View.GONE);
+				loadingIndicator.animate().setListener(null);
+				
+			}
+			
+			@Override
+			public void onAnimationCancel(Animator animation) {
+				loadingIndicator.setVisibility(View.GONE);
+				loadingIndicator.animate().setListener(null);
+				
+			}
+		});
 	}
 
 	private void selectSource(int idx) {
@@ -183,6 +222,7 @@ public class ArtbookActivity extends Activity implements OnClickListener,
 	}
 
 	public void onDataLoaded(DribbbleFeed feed) {
+		hideLoading();
 		adapter.update(feed);
 		container.dataInvalidated();
 		
@@ -231,6 +271,7 @@ public class ArtbookActivity extends Activity implements OnClickListener,
 	public void onClick(View v) {
 		Log.d(TAG, "Loading data");
 		pageIndex++;
+		showLoading();
 		fetch.load(this, DribbbleFetch.getPopularURL(itemsPerPage, pageIndex));
 	}
 
