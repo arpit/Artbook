@@ -22,9 +22,10 @@ public class DribbbleFetch {
 	
 	public static final String TAG = "DribbbleFetch";
 
+	private boolean mIsLoading = false;
 	
 	public void load(final ArtbookActivity caller, String url) {
-		
+		mIsLoading = true;
 		new AsyncTask<String, Void, String>() {
 
 			OkHttpClient client = new OkHttpClient();
@@ -48,6 +49,7 @@ public class DribbbleFetch {
 					caller.onDataFailed();
 				}
 				caller.onDataLoaded(feed);
+				mIsLoading = false;
 			}
 
 			String get(URL url) throws IOException {
@@ -83,6 +85,10 @@ public class DribbbleFetch {
 	}
 	public static String getDebutsURL(int itemsPerPage, int pageIndex){
 		return "http://api.dribbble.com/shots/debuts?per_page="+itemsPerPage+"&page="+pageIndex;
+	}
+
+	public boolean isLoading() {
+		return mIsLoading;
 	}
 
 }

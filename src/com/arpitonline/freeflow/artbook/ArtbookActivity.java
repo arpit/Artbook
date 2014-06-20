@@ -147,11 +147,25 @@ public class ArtbookActivity extends Activity implements OnClickListener,
 			detailsView.setVisibility(View.GONE);
 
 		}
+		
+		container.addScrollListener(new OnScrollListener() {
+
+			@Override
+			public void onScroll(FreeFlowContainer container) {
+				if(container.getScrollPercentY() > .95 && !fetch.isLoading()){
+					
+					pageIndex++;
+					fetch.load(ArtbookActivity.this, DribbbleFetch.getPopularURL(itemsPerPage, pageIndex));
+		
+				}
+			}
+		});
 
 	}
 
 	private void selectSource(int idx) {
 		String url = "";
+		pageIndex = 1;
 		adapter.clear();
 		switch (idx) {
 		case 0:
@@ -171,13 +185,7 @@ public class ArtbookActivity extends Activity implements OnClickListener,
 	public void onDataLoaded(DribbbleFeed feed) {
 		adapter.update(feed);
 		container.dataInvalidated();
-		container.addScrollListener(new OnScrollListener() {
-
-			@Override
-			public void onScroll(FreeFlowContainer container) {
-				Log.d(TAG, "scroll percent " + container.getScrollPercentY());
-			}
-		});
+		
 	}
 
 	@Override
