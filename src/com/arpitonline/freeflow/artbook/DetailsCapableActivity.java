@@ -30,6 +30,15 @@ public class DetailsCapableActivity extends Activity {
 			desc.setMovementMethod(LinkMovementMethod.getInstance());
 		}
 		
+		ImageView profileImg = (ImageView) findViewById(R.id.profile_img);
+		Picasso.with(this).load(s.getPlayer().getAvatar_url()).into(profileImg);
+		
+		TextView a1  = (TextView)findViewById(R.id.avatar_t_1);
+		TextView a2  = (TextView)findViewById(R.id.avatar_t_2);
+		
+		a1.setText(s.getPlayer().getUsername());
+		a2.setText(s.getPlayer().getLocation());
+		
 		
 	}
 
