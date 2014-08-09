@@ -1,9 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#111"
-    android:gravity="center_horizontal" >
+    android:background="@color/dribbble_pink" >
 
     <ImageView
         android:id="@+id/shot_img"
@@ -11,42 +10,61 @@
         android:layout_height="300dp"
         android:scaleType="fitCenter" />
 
-    <ImageView
-        android:id="@+id/profile_img"
-        android:layout_width="60dp"
-        android:layout_height="60dp"
-        android:layout_below="@id/shot_img"
-        android:background="#ffffff"
-        android:scaleType="centerCrop" 
-        android:layout_marginLeft="16dp"/>
-
-    <TextView
-        android:id="@+id/avatar_t_1"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignTop="@+id/profile_img"
-        android:layout_marginLeft="10dp"
-        android:layout_toRightOf="@+id/profile_img"
-        android:textColor="#fff" 
-        android:textSize="22sp"/>
-
-    <TextView
-        android:id="@+id/avatar_t_2"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignLeft="@id/avatar_t_1"
-        android:layout_below="@id/avatar_t_1"
-        android:textColor="#fff" 
-        android:textSize="16sp"/>
-
-    <TextView
-        android:id="@+id/shot_desc"
+    <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/profile_img"
-        android:padding="20dp"
-        android:textSize="16sp"
-        android:layout_marginTop="10dp"
-        android:background="#dfdfdf" />
+        android:layout_height="match_parent"
+        android:scrollbars="none" >
 
-</RelativeLayout>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_horizontal"
+            android:orientation="vertical" >
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="300dp"
+                android:background="@color/dribbble_pink" >
+
+                <ImageView
+                    android:id="@+id/profile_img"
+                    android:layout_width="60dp"
+                    android:layout_height="60dp"
+                    android:background="#ffffff"
+                    android:scaleType="centerCrop" />
+
+                <TextView
+                    android:id="@+id/avatar_t_1"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_alignTop="@+id/profile_img"
+                    android:layout_toRightOf="@+id/profile_img"
+                    android:paddingLeft="10dp"
+                    android:textColor="#fff"
+                    android:textSize="22sp" />
+
+                <TextView
+                    android:id="@+id/avatar_t_2"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_alignLeft="@id/avatar_t_1"
+                    android:layout_below="@id/avatar_t_1"
+                    android:paddingLeft="10dp"
+                    android:textColor="#fff"
+                    android:textSize="16sp" />
+            </RelativeLayout>
+
+            <TextView
+                android:id="@+id/shot_desc"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="1"
+                android:background="#dfdfdf"
+                android:minHeight="300dp"
+                android:padding="20dp"
+                android:textSize="16sp" />
+        </LinearLayout>
+    </ScrollView>
+
+</FrameLayout>

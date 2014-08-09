@@ -31,7 +31,7 @@
         android:layout_width="@dimen/side_drawer_width"
         android:layout_height="match_parent"
         android:layout_gravity="start"
-        android:background="#EC6197"
+        android:background="@color/dribbble_pink"
         android:orientation="vertical" >
 
         <ListView

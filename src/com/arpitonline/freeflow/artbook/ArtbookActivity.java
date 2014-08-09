@@ -1,5 +1,8 @@
 package com.arpitonline.freeflow.artbook;
 
+import java.lang.reflect.Array;
+import java.util.ArrayList;
+
 import android.animation.Animator;
 import android.animation.Animator.AnimatorListener;
 import android.content.Intent;
@@ -342,16 +345,21 @@ public class ArtbookActivity extends DetailsCapableActivity implements OnClickLi
 	@Override
 	public void onItemClick(AbsLayoutContainer parent, FreeFlowItem proxy) {
 		areDetailsShowing = true;
-		Shot s = (Shot) adapter.getSection(0).getDataAtIndex(proxy.itemIndex);
 		
 		if(newact){
-			Intent i = new Intent(this, DetailsActivity.class);
-			i.putExtra("shot", s);
-			startActivity(i);
+			Intent intent = new Intent(this, DetailsActivity.class);
+			ArrayList<Shot> shots = new ArrayList<Shot>();
+			for (int i=0; i < adapter.getSection(0).getDataCount(); i++){
+				shots.add((Shot)adapter.getSection(0).getDataAtIndex(i));
+			}
+			
+			intent.putExtra("selectedIndex", proxy.itemIndex);
+			intent.putParcelableArrayListExtra("shots", shots);
+			startActivity(intent);
 		}
 		
 		else{
-			renderShot(s);
+			//renderShot(ArtbookActivitythis, s);
 		}
 	
 	}
