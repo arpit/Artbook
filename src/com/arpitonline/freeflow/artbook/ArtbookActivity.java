@@ -1,5 +1,6 @@
 package com.arpitonline.freeflow.artbook;
 
+import com.crashlytics.android.Crashlytics;
 import java.util.ArrayList;
 
 import android.animation.Animator;
@@ -75,6 +76,7 @@ public class ArtbookActivity extends DetailsCapableActivity implements
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+		Crashlytics.start(this);
 		setContentView(R.layout.activity_artbook);
 
 		loadingIndicator = findViewById(R.id.loading);
