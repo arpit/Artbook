@@ -1,6 +1,7 @@
 package com.arpitonline.freeflow.artbook;
 
 import com.crashlytics.android.Crashlytics;
+
 import java.util.ArrayList;
 
 import android.animation.Animator;
@@ -8,8 +9,10 @@ import android.animation.Animator.AnimatorListener;
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.Point;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.v4.app.ActionBarDrawerToggle;
+import android.support.v4.graphics.drawable.DrawableCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.util.Log;
 import android.view.Display;
@@ -142,6 +145,10 @@ public class ArtbookActivity extends DetailsCapableActivity implements
 		grid.setLayoutParams(params);
 
 		layouts = new FreeFlowLayout[] { grid, custom };
+		layoutIcons = new Drawable[]{
+               	getResources().getDrawable(R.drawable.ic_quilt),
+               	getResources().getDrawable(R.drawable.grid)
+				};
 
 		adapter = new DribbbleDataAdapter(this);
 
@@ -264,6 +271,8 @@ public class ArtbookActivity extends DetailsCapableActivity implements
 		getMenuInflater().inflate(R.menu.artbook, menu);
 		return true;
 	}
+	
+	private Drawable[] layoutIcons;
 
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
@@ -277,6 +286,7 @@ public class ArtbookActivity extends DetailsCapableActivity implements
 				currLayoutIndex = 0;
 			}
 			container.setLayout(layouts[currLayoutIndex]);
+			item.setIcon(layoutIcons[currLayoutIndex]);
 
 			break;
 
@@ -420,9 +430,14 @@ public class ArtbookActivity extends DetailsCapableActivity implements
 			for (int i = 0; i < adapter.getSection(0).getDataCount(); i++) {
 				shots.add((Shot) adapter.getSection(0).getDataAtIndex(i));
 			}
+			
+			/* set the data on the application. Otherwise you might get a failed
+			 * Binder transaction cause the data is too much to send across the 
+			 * process boundary. 
+			 */
+			((ArtbookApplication)getApplication()).setShots(shots);
 
 			intent.putExtra("selectedIndex", proxy.itemIndex);
-			intent.putParcelableArrayListExtra("shots", shots);
 			startActivity(intent);
 		}
 

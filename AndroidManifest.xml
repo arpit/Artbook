@@ -30,7 +30,8 @@
         android:allowBackup="true"
         android:icon="@drawable/ic_launcher"
         android:label="@string/app_name"
-        android:theme="@style/AppTheme" >
+        android:theme="@style/AppTheme" 
+        android:name=".ArtbookApplication">
         <activity
             android:name=".ArtbookActivity"
             android:label="@string/app_name" >
@@ -42,6 +43,7 @@
         </activity>
         <activity android:name="com.arpitonline.freeflow.artbook.AboutActivity" />
         <activity android:name="com.arpitonline.freeflow.artbook.DetailsActivity" />
+        <meta-data android:name="com.crashlytics.ApiKey" android:value="@string/crashalytics_api_key"/>
     </application>
 
 </manifest>

@@ -26,7 +26,7 @@ public class DetailsActivity extends DetailsCapableActivity {
 		// this.setTitle(s.getTitle());
 
 		setContentView(R.layout.photo_details_adaper);
-		ArrayList<Shot> shots = getIntent().getParcelableArrayListExtra("shots");
+		ArrayList<Shot> shots = ((ArtbookApplication)getApplication()).getShots();
 		adapter = new PhotosDetailsListAdapter(shots);
 		pager = (ViewPager) findViewById(R.id.pages_holder);
 		pager.setAdapter(adapter);
