@@ -2,12 +2,12 @@
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/dribbble_pink" >
+    android:background="@color/dribbble_pink">
 
     <ImageView
         android:id="@+id/shot_img"
         android:layout_width="match_parent"
-        android:layout_height="300dp"
+        android:layout_height="@dimen/details_image_height"
         android:scaleType="fitCenter" />
 
     <ScrollView
@@ -24,7 +24,7 @@
             <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="300dp"
+                android:layout_marginTop="@dimen/details_image_height"
                 android:background="@color/dribbble_pink" >
 
                 <ImageView

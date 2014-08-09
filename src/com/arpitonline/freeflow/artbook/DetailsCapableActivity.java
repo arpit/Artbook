@@ -18,10 +18,10 @@ public class DetailsCapableActivity extends Activity {
 	protected void renderShot(ViewGroup parent, Shot s){
 		ImageView imgView = (ImageView) parent.findViewById(R.id.shot_img);
 		
-		View tf = parent.findViewById(R.id.shot_title);
-		if(tf != null){
-			((TextView)tf).setText(s.getTitle());
-		}
+//		View tf = parent.findViewById(R.id.shot_title);
+//		if(tf != null){
+//			((TextView)tf).setText(s.getTitle());
+//		}
 		Picasso.with(this).load(s.getImage_url()).into(imgView);
 		
 		TextView desc = ((TextView)parent.findViewById(R.id.shot_desc));

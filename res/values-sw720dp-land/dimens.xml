@@ -21,5 +21,6 @@
     -->
     <dimen name="activity_horizontal_margin">128dp</dimen>
     <dimen name="side_drawer_width">340dp</dimen>
+    <dimen name="details_image_height">450dp</dimen>
 
 </resources>

@@ -1,15 +1,16 @@
 package com.arpitonline.freeflow.artbook;
 
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 
 import android.animation.Animator;
 import android.animation.Animator.AnimatorListener;
 import android.content.Intent;
+import android.graphics.Color;
 import android.graphics.Point;
 import android.os.Bundle;
 import android.support.v4.app.ActionBarDrawerToggle;
 import android.support.v4.widget.DrawerLayout;
+import android.util.Log;
 import android.view.Display;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -39,8 +40,9 @@ import com.comcast.freeflow.layouts.FreeFlowLayout;
 import com.comcast.freeflow.layouts.VGridLayout;
 import com.comcast.freeflow.utils.ViewUtils;
 
-public class ArtbookActivity extends DetailsCapableActivity implements OnClickListener,
-		android.widget.AdapterView.OnItemClickListener, OnItemClickListener {
+public class ArtbookActivity extends DetailsCapableActivity implements
+		OnClickListener, android.widget.AdapterView.OnItemClickListener,
+		OnItemClickListener {
 
 	public static final String TAG = "ArtbookActivity";
 
@@ -62,17 +64,19 @@ public class ArtbookActivity extends DetailsCapableActivity implements OnClickLi
 
 	FreeFlowLayout[] layouts;
 	int currLayoutIndex = 0;
-	
+
 	protected ViewGroup detailsView;
 
-	
 	boolean newact;
+	Point size;
+	
+	int columnCount;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_artbook);
-		
+
 		loadingIndicator = findViewById(R.id.loading);
 		mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
 		mDrawerList = (ListView) findViewById(R.id.left_drawer);
@@ -98,16 +102,18 @@ public class ArtbookActivity extends DetailsCapableActivity implements OnClickLi
 				R.layout.drawer_list_item, new String[] { "Popular",
 						"Everyone", "Debuts" }));
 		mDrawerList.setOnItemClickListener(this);
-		
-		findViewById(R.id.about_tf).setOnClickListener(new View.OnClickListener() {
-			
-			@Override
-			public void onClick(View v) {
-				Intent about = new Intent(ArtbookActivity.this, AboutActivity.class);
-				startActivity(about);
-			}
-		});
-		
+
+		findViewById(R.id.about_tf).setOnClickListener(
+				new View.OnClickListener() {
+
+					@Override
+					public void onClick(View v) {
+						Intent about = new Intent(ArtbookActivity.this,
+								AboutActivity.class);
+						startActivity(about);
+					}
+				});
+
 		CardIncomingAnimation anim = new CardIncomingAnimation();
 
 		anim.animateIndividualCellsSequentially = false;
@@ -119,14 +125,15 @@ public class ArtbookActivity extends DetailsCapableActivity implements OnClickLi
 		container.setLayoutAnimator(anim);
 
 		Display display = getWindowManager().getDefaultDisplay();
-		Point size = new Point();
+		size = new Point();
 		display.getSize(size);
 
 		// findViewById(R.id.load_more).setOnClickListener(this);
 		custom = new DribbbleQuiltLayout();
 		grid = new VGridLayout();
-
-		int columnCount = getResources().getInteger(R.integer.column_count);
+		columnCount = getResources().getInteger(R.integer.column_count);
+		
+		
 
 		VGridLayout.LayoutParams params = new VGridLayout.LayoutParams(size.x
 				/ columnCount, (int) ((size.x / columnCount) * 0.75));
@@ -139,92 +146,89 @@ public class ArtbookActivity extends DetailsCapableActivity implements OnClickLi
 		container.setLayout(layouts[currLayoutIndex]);
 		container.setOnItemClickListener(this);
 		container.setAdapter(adapter);
+		
+		
+		
 		fetch = new DribbbleFetch();
 		selectSource(0);
 		newact = getResources().getBoolean(R.bool.start_new_activity);
-		
-		if(newact){
-			
-		}
-		else{
+		if (newact) {
+
+		} else {
 			detailsView = (ViewGroup) LayoutInflater.from(this).inflate(
-					R.layout.shot_details, null);
+					R.layout.shot_details, container, false);
+
 			detailsView.setOnClickListener(new View.OnClickListener() {
-				
+
 				@Override
 				public void onClick(View v) {
-					//trap the event
+					// trap the event
 				}
 			});
-			FrameLayout.LayoutParams fl = new FrameLayout.LayoutParams((int) ViewUtils.dipToPixels(this, 760),
-					
-					FrameLayout.LayoutParams.WRAP_CONTENT );
-			fl.gravity = Gravity.CENTER;
+			FrameLayout.LayoutParams fl = new FrameLayout.LayoutParams(
+					(int) ViewUtils.dipToPixels(this, 600),
+
+					FrameLayout.LayoutParams.WRAP_CONTENT);
+			fl.gravity = Gravity.RIGHT;
 			detailsView.setLayoutParams(fl);
 			containerFrame.addView(detailsView);
-			detailsView.setVisibility(View.GONE);
-			
-			detailsView.findViewById(R.id.details_done).setOnClickListener(this);
-			detailsView.setTranslationY(2 * containerFrame.getHeight());
-			detailsView.setRotation(45f);
-			detailsView.setVisibility(View.VISIBLE);
-			detailsView.animate().translationY(0).rotation(0).setDuration(500)
-					.setInterpolator(new EaseInOutQuintInterpolator());
-			
-			
+			detailsView.setVisibility(View.INVISIBLE);
 
 		}
-		
+
 		container.addScrollListener(new OnScrollListener() {
 
 			@Override
 			public void onScroll(FreeFlowContainer container) {
-				if(container.getScrollPercentY() > .95 && !fetch.isLoading()){
-					
+				if (container.getScrollPercentY() > .95 && !fetch.isLoading()) {
+
 					pageIndex++;
 					showLoading();
-					fetch.load(ArtbookActivity.this, DribbbleFetch.getPopularURL(itemsPerPage, pageIndex));
-		
+					fetch.load(ArtbookActivity.this, DribbbleFetch
+							.getPopularURL(itemsPerPage, pageIndex));
+
 				}
 			}
 		});
 
 	}
-	
-	private void showLoading(){
+
+	private void showLoading() {
 		loadingIndicator.setVisibility(View.VISIBLE);
 		loadingIndicator.setTranslationY(loadingIndicator.getHeight());
 		loadingIndicator.animate().translationY(0).setDuration(250);
 	}
-	private void hideLoading(){
-		loadingIndicator.animate().translationY(loadingIndicator.getHeight()).setDuration(250).setListener(new AnimatorListener() {
-			
-			@Override
-			public void onAnimationStart(Animator animation) {
-				// TODO Auto-generated method stub
-				
-			}
-			
-			@Override
-			public void onAnimationRepeat(Animator animation) {
-				// TODO Auto-generated method stub
-				
-			}
-			
-			@Override
-			public void onAnimationEnd(Animator animation) {
-				loadingIndicator.setVisibility(View.GONE);
-				loadingIndicator.animate().setListener(null);
-				
-			}
-			
-			@Override
-			public void onAnimationCancel(Animator animation) {
-				loadingIndicator.setVisibility(View.GONE);
-				loadingIndicator.animate().setListener(null);
-				
-			}
-		});
+
+	private void hideLoading() {
+		loadingIndicator.animate().translationY(loadingIndicator.getHeight())
+				.setDuration(250).setListener(new AnimatorListener() {
+
+					@Override
+					public void onAnimationStart(Animator animation) {
+						// TODO Auto-generated method stub
+
+					}
+
+					@Override
+					public void onAnimationRepeat(Animator animation) {
+						// TODO Auto-generated method stub
+
+					}
+
+					@Override
+					public void onAnimationEnd(Animator animation) {
+						loadingIndicator.setVisibility(View.GONE);
+						loadingIndicator.animate().setListener(null);
+
+					}
+
+					@Override
+					public void onAnimationCancel(Animator animation) {
+						loadingIndicator.setVisibility(View.GONE);
+						loadingIndicator.animate().setListener(null);
+
+					}
+				});
 	}
 
 	private void selectSource(int idx) {
@@ -250,7 +254,7 @@ public class ArtbookActivity extends DetailsCapableActivity implements OnClickLi
 		hideLoading();
 		adapter.update(feed);
 		container.dataInvalidated();
-		
+
 	}
 
 	@Override
@@ -273,7 +277,7 @@ public class ArtbookActivity extends DetailsCapableActivity implements OnClickLi
 			container.setLayout(layouts[currLayoutIndex]);
 
 			break;
-	
+
 		default:
 			return super.onOptionsItemSelected(item);
 
@@ -291,41 +295,104 @@ public class ArtbookActivity extends DetailsCapableActivity implements OnClickLi
 
 	@Override
 	public void onClick(View v) {
-		//close clicked
-		closeDetails();
+		// close clicked
+		closeDetails(true);
 	}
 	
-	private void closeDetails(){
-		areDetailsShowing = false;
-		detailsView
-		.animate()
-		.translationY(2*containerFrame.getHeight())
+	private void openDetails(){
+		
+		if(areDetailsShowing){
+			return;
+		}
+		areDetailsShowing = true;
+		
+		final int w = size.x - detailsView.getWidth();
+
+		if(container.getLayout() == grid){
+			grid = (VGridLayout)container.getLayout();
+			grid.setLayoutParams( new VGridLayout.LayoutParams(w/2, 3*(w/2)/4));
+			
+		}
+		else{
+			
+		}
+		
+		ViewGroup.LayoutParams p = container.getLayoutParams();
+		p.width = w;
+		container.setLayoutParams(p);
+		container.layoutChanged();
+		
+		
+		detailsView.setVisibility(View.VISIBLE);
+		
+		detailsView.setTranslationY(2 * containerFrame.getHeight());
+		
+		detailsView.animate().translationY(0)
 		.setDuration(500)
-		.setInterpolator(
-				new EaseInOutQuintInterpolator()).setListener(new AnimatorListener() {
-					
-					@Override
-					public void onAnimationStart(Animator animation) {
-						
-					}
-					
-					@Override
-					public void onAnimationRepeat(Animator animation) {
-						
-					}
-					
-					@Override
-					public void onAnimationEnd(Animator animation) {
-						detailsView.setVisibility(View.GONE);
-						detailsView.setTranslationY(0);
-						detailsView.animate().setListener(null);
-					}
-					
-					@Override
-					public void onAnimationCancel(Animator animation) {
-						
-					}
-				});
+		.setInterpolator(new EaseInOutQuintInterpolator());
+		
+		
+	}
+
+	private void closeDetails(boolean withAnimation) {
+		if(!areDetailsShowing){
+			return;
+		}
+		areDetailsShowing = false;
+		
+		if(container.getLayout() == grid){
+			grid = (VGridLayout)container.getLayout();
+			VGridLayout.LayoutParams params = new VGridLayout.LayoutParams(size.x
+					/ columnCount, (int) ((size.x / columnCount) * 0.75));
+			grid.setLayoutParams(params);
+			
+		}
+		else{
+			
+		}
+		
+		
+		ViewGroup.LayoutParams p = container.getLayoutParams();
+		p.width = size.x;
+		container.setLayoutParams(p);
+		container.layoutChanged();
+		
+		if(withAnimation){
+			detailsView.animate().translationY(2 * containerFrame.getHeight())
+			.setDuration(500)
+			.setInterpolator(new EaseInOutQuintInterpolator())
+			.setListener(new AnimatorListener() {
+
+				@Override
+				public void onAnimationStart(Animator animation) {
+
+				}
+
+				@Override
+				public void onAnimationRepeat(Animator animation) {
+
+				}
+
+				@Override
+				public void onAnimationEnd(Animator animation) {
+					detailsView.setVisibility(View.GONE);
+					detailsView.setTranslationY(0);
+					detailsView.animate().setListener(null);
+				}
+
+				@Override
+				public void onAnimationCancel(Animator animation) {
+
+				}
+			});
+		}
+		else{
+			detailsView.setVisibility(View.GONE);
+			detailsView.setTranslationY(0);
+			detailsView.animate().setListener(null);
+		}
+		
+		
 	}
 
 	@Override
@@ -341,37 +408,37 @@ public class ArtbookActivity extends DetailsCapableActivity implements OnClickLi
 	}
 
 	boolean areDetailsShowing = false;
-	
+
 	@Override
 	public void onItemClick(AbsLayoutContainer parent, FreeFlowItem proxy) {
-		areDetailsShowing = true;
-		
-		if(newact){
+		Shot s = (Shot) adapter.getSection(0).getDataAtIndex(proxy.itemIndex);
+		if (newact) {
 			Intent intent = new Intent(this, DetailsActivity.class);
 			ArrayList<Shot> shots = new ArrayList<Shot>();
-			for (int i=0; i < adapter.getSection(0).getDataCount(); i++){
-				shots.add((Shot)adapter.getSection(0).getDataAtIndex(i));
+			for (int i = 0; i < adapter.getSection(0).getDataCount(); i++) {
+				shots.add((Shot) adapter.getSection(0).getDataAtIndex(i));
 			}
-			
+
 			intent.putExtra("selectedIndex", proxy.itemIndex);
 			intent.putParcelableArrayListExtra("shots", shots);
 			startActivity(intent);
 		}
-		
-		else{
-			//renderShot(ArtbookActivitythis, s);
+
+		else {
+			openDetails();
+			renderShot(detailsView, s);
 		}
-	
+
 	}
-	
+
 	@Override
-	public void onBackPressed(){
-		if(areDetailsShowing){
-			closeDetails();
+	public void onBackPressed() {
+		if (areDetailsShowing) {
+			closeDetails(true);
 			return;
 		}
 		super.onBackPressed();
-		
+
 	}
-	
+
 }
