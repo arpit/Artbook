@@ -2,7 +2,6 @@ package com.arpitonline.freeflow.artbook;
 
 import android.animation.Animator;
 import android.animation.Animator.AnimatorListener;
-import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Point;
 import android.os.Bundle;
@@ -19,9 +18,7 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.FrameLayout;
-import android.widget.ImageView;
 import android.widget.ListView;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.arpitonline.freeflow.artbook.data.DribbbleDataAdapter;
@@ -38,9 +35,8 @@ import com.comcast.freeflow.core.FreeFlowItem;
 import com.comcast.freeflow.layouts.FreeFlowLayout;
 import com.comcast.freeflow.layouts.VGridLayout;
 import com.comcast.freeflow.utils.ViewUtils;
-import com.squareup.picasso.Picasso;
 
-public class ArtbookActivity extends Activity implements OnClickListener,
+public class ArtbookActivity extends DetailsCapableActivity implements OnClickListener,
 		android.widget.AdapterView.OnItemClickListener, OnItemClickListener {
 
 	public static final String TAG = "ArtbookActivity";
@@ -61,10 +57,13 @@ public class ArtbookActivity extends Activity implements OnClickListener,
 
 	DribbbleDataAdapter adapter;
 
-	ViewGroup detailsView;
-
 	FreeFlowLayout[] layouts;
 	int currLayoutIndex = 0;
+	
+	protected ViewGroup detailsView;
+
+	
+	boolean newact;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -139,8 +138,12 @@ public class ArtbookActivity extends Activity implements OnClickListener,
 		container.setAdapter(adapter);
 		fetch = new DribbbleFetch();
 		selectSource(0);
-
-		if (1 == 1) {
+		newact = getResources().getBoolean(R.bool.start_new_activity);
+		
+		if(newact){
+			
+		}
+		else{
 			detailsView = (ViewGroup) LayoutInflater.from(this).inflate(
 					R.layout.shot_details, null);
 			detailsView.setOnClickListener(new View.OnClickListener() {
@@ -157,6 +160,15 @@ public class ArtbookActivity extends Activity implements OnClickListener,
 			detailsView.setLayoutParams(fl);
 			containerFrame.addView(detailsView);
 			detailsView.setVisibility(View.GONE);
+			
+			detailsView.findViewById(R.id.details_done).setOnClickListener(this);
+			detailsView.setTranslationY(2 * containerFrame.getHeight());
+			detailsView.setRotation(45f);
+			detailsView.setVisibility(View.VISIBLE);
+			detailsView.animate().translationY(0).rotation(0).setDuration(500)
+					.setInterpolator(new EaseInOutQuintInterpolator());
+			
+			
 
 		}
 		
@@ -331,21 +343,17 @@ public class ArtbookActivity extends Activity implements OnClickListener,
 	public void onItemClick(AbsLayoutContainer parent, FreeFlowItem proxy) {
 		areDetailsShowing = true;
 		Shot s = (Shot) adapter.getSection(0).getDataAtIndex(proxy.itemIndex);
-
-		ImageView imgView = (ImageView) detailsView.findViewById(R.id.shot_img);
-		detailsView.findViewById(R.id.details_done).setOnClickListener(this);
-
-		((TextView) detailsView.findViewById(R.id.shot_title)).setText(s
-				.getTitle());
-		// ((TextView)detailsView.findViewById(R.id.shot_desc)).setText(s.get);
-
-		Picasso.with(this).load(s.getImage_url()).into(imgView);
-		detailsView.setTranslationY(2 * containerFrame.getHeight());
-		detailsView.setRotation(45f);
-		detailsView.setVisibility(View.VISIBLE);
-		detailsView.animate().translationY(0).rotation(0).setDuration(500)
-				.setInterpolator(new EaseInOutQuintInterpolator());
-
+		
+		if(newact){
+			Intent i = new Intent(this, DetailsActivity.class);
+			i.putExtra("shot", s);
+			startActivity(i);
+		}
+		
+		else{
+			renderShot(s);
+		}
+	
 	}
 	
 	@Override

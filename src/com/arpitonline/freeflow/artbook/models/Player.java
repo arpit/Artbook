@@ -1,8 +1,11 @@
 package com.arpitonline.freeflow.artbook.models;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 import com.google.gson.annotations.Expose;
 
-public class Player {
+public class Player implements Parcelable {
 
 	@Expose
 	private Integer id;
@@ -305,4 +308,129 @@ public class Player {
 		return this;
 	}
 
+
+    protected Player(Parcel in) {
+        id = in.readByte() == 0x00 ? null : in.readInt();
+        name = in.readString();
+        location = in.readString();
+        followers_count = in.readByte() == 0x00 ? null : in.readInt();
+        draftees_count = in.readByte() == 0x00 ? null : in.readInt();
+        likes_count = in.readByte() == 0x00 ? null : in.readInt();
+        likes_received_count = in.readByte() == 0x00 ? null : in.readInt();
+        comments_count = in.readByte() == 0x00 ? null : in.readInt();
+        comments_received_count = in.readByte() == 0x00 ? null : in.readInt();
+        rebounds_count = in.readByte() == 0x00 ? null : in.readInt();
+        rebounds_received_count = in.readByte() == 0x00 ? null : in.readInt();
+        url = in.readString();
+        avatar_url = in.readString();
+        username = in.readString();
+        twitter_screen_name = in.readString();
+        website_url = in.readString();
+        drafted_by_player_id = in.readByte() == 0x00 ? null : in.readInt();
+        shots_count = in.readByte() == 0x00 ? null : in.readInt();
+        following_count = in.readByte() == 0x00 ? null : in.readInt();
+        created_at = in.readString();
+    }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        if (id == null) {
+            dest.writeByte((byte) (0x00));
+        } else {
+            dest.writeByte((byte) (0x01));
+            dest.writeInt(id);
+        }
+        dest.writeString(name);
+        dest.writeString(location);
+        if (followers_count == null) {
+            dest.writeByte((byte) (0x00));
+        } else {
+            dest.writeByte((byte) (0x01));
+            dest.writeInt(followers_count);
+        }
+        if (draftees_count == null) {
+            dest.writeByte((byte) (0x00));
+        } else {
+            dest.writeByte((byte) (0x01));
+            dest.writeInt(draftees_count);
+        }
+        if (likes_count == null) {
+            dest.writeByte((byte) (0x00));
+        } else {
+            dest.writeByte((byte) (0x01));
+            dest.writeInt(likes_count);
+        }
+        if (likes_received_count == null) {
+            dest.writeByte((byte) (0x00));
+        } else {
+            dest.writeByte((byte) (0x01));
+            dest.writeInt(likes_received_count);
+        }
+        if (comments_count == null) {
+            dest.writeByte((byte) (0x00));
+        } else {
+            dest.writeByte((byte) (0x01));
+            dest.writeInt(comments_count);
+        }
+        if (comments_received_count == null) {
+            dest.writeByte((byte) (0x00));
+        } else {
+            dest.writeByte((byte) (0x01));
+            dest.writeInt(comments_received_count);
+        }
+        if (rebounds_count == null) {
+            dest.writeByte((byte) (0x00));
+        } else {
+            dest.writeByte((byte) (0x01));
+            dest.writeInt(rebounds_count);
+        }
+        if (rebounds_received_count == null) {
+            dest.writeByte((byte) (0x00));
+        } else {
+            dest.writeByte((byte) (0x01));
+            dest.writeInt(rebounds_received_count);
+        }
+        dest.writeString(url);
+        dest.writeString(avatar_url);
+        dest.writeString(username);
+        dest.writeString(twitter_screen_name);
+        dest.writeString(website_url);
+        if (drafted_by_player_id == null) {
+            dest.writeByte((byte) (0x00));
+        } else {
+            dest.writeByte((byte) (0x01));
+            dest.writeInt(drafted_by_player_id);
+        }
+        if (shots_count == null) {
+            dest.writeByte((byte) (0x00));
+        } else {
+            dest.writeByte((byte) (0x01));
+            dest.writeInt(shots_count);
+        }
+        if (following_count == null) {
+            dest.writeByte((byte) (0x00));
+        } else {
+            dest.writeByte((byte) (0x01));
+            dest.writeInt(following_count);
+        }
+        dest.writeString(created_at);
+    }
+
+    @SuppressWarnings("unused")
+    public static final Parcelable.Creator<Player> CREATOR = new Parcelable.Creator<Player>() {
+        @Override
+        public Player createFromParcel(Parcel in) {
+            return new Player(in);
+        }
+
+        @Override
+        public Player[] newArray(int size) {
+            return new Player[size];
+        }
+    };
 }

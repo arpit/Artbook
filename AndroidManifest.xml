@@ -41,6 +41,7 @@
             </intent-filter>
         </activity>
         <activity android:name="com.arpitonline.freeflow.artbook.AboutActivity" />
+        <activity android:name="com.arpitonline.freeflow.artbook.DetailsActivity" />
     </application>
 
 </manifest>

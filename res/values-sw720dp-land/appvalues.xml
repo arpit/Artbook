@@ -1,4 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-   <item name="column_count" type="integer">4</item> 
+   <item name="column_count" type="integer">4</item>
+   <item name="start_new_activity" type="bool">false</item> 
 </resources>

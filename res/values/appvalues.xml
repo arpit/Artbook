@@ -2,4 +2,5 @@
 <resources>
    <item name="column_count" type="integer">2</item> 
    <color name="dribbble_pink">#EC6197</color>
+   <item name="start_new_activity" type="bool">true</item>
 </resources>

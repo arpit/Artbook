@@ -1,8 +1,11 @@
 package com.arpitonline.freeflow.artbook.models;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 import com.google.gson.annotations.Expose;
 
-public class Shot extends Object {
+public class Shot extends Object implements Parcelable {
 
 	@Expose
 	private Integer id;
@@ -36,6 +39,9 @@ public class Shot extends Object {
 	private String created_at;
 	@Expose
 	private String image_400_url;
+	@Expose
+	private String description;
+	
 
 	public Integer getId() {
 		return id;
@@ -60,6 +66,19 @@ public class Shot extends Object {
 
 	public Shot withTitle(String title) {
 		this.title = title;
+		return this;
+	}
+	
+	public String getDescription() {
+		return description;
+	}
+
+	public void setDescription(String description) {
+		this.description = description;
+	}
+
+	public Shot withDescription(String description) {
+		this.description = description;
 		return this;
 	}
 
@@ -252,4 +271,103 @@ public class Shot extends Object {
 		return oShot.image_url.equals(image_url) && (oShot.id == this.id);
 	}
 
+
+    protected Shot(Parcel in) {
+        id = in.readByte() == 0x00 ? null : in.readInt();
+        title = in.readString();
+        height = in.readByte() == 0x00 ? null : in.readInt();
+        width = in.readByte() == 0x00 ? null : in.readInt();
+        likes_count = in.readByte() == 0x00 ? null : in.readInt();
+        comments_count = in.readByte() == 0x00 ? null : in.readInt();
+        rebounds_count = in.readByte() == 0x00 ? null : in.readInt();
+        url = in.readString();
+        short_url = in.readString();
+        views_count = in.readByte() == 0x00 ? null : in.readInt();
+        rebound_source_id = in.readByte() == 0x00 ? null : in.readInt();
+        image_url = in.readString();
+        image_teaser_url = in.readString();
+        player = (Player) in.readParcelable(Player.class.getClassLoader());
+        created_at = in.readString();
+        image_400_url = in.readString();
+        description = in.readString();
+    }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        if (id == null) {
+            dest.writeByte((byte) (0x00));
+        } else {
+            dest.writeByte((byte) (0x01));
+            dest.writeInt(id);
+        }
+        dest.writeString(title);
+        if (height == null) {
+            dest.writeByte((byte) (0x00));
+        } else {
+            dest.writeByte((byte) (0x01));
+            dest.writeInt(height);
+        }
+        if (width == null) {
+            dest.writeByte((byte) (0x00));
+        } else {
+            dest.writeByte((byte) (0x01));
+            dest.writeInt(width);
+        }
+        if (likes_count == null) {
+            dest.writeByte((byte) (0x00));
+        } else {
+            dest.writeByte((byte) (0x01));
+            dest.writeInt(likes_count);
+        }
+        if (comments_count == null) {
+            dest.writeByte((byte) (0x00));
+        } else {
+            dest.writeByte((byte) (0x01));
+            dest.writeInt(comments_count);
+        }
+        if (rebounds_count == null) {
+            dest.writeByte((byte) (0x00));
+        } else {
+            dest.writeByte((byte) (0x01));
+            dest.writeInt(rebounds_count);
+        }
+        dest.writeString(url);
+        dest.writeString(short_url);
+        if (views_count == null) {
+            dest.writeByte((byte) (0x00));
+        } else {
+            dest.writeByte((byte) (0x01));
+            dest.writeInt(views_count);
+        }
+        if (rebound_source_id == null) {
+            dest.writeByte((byte) (0x00));
+        } else {
+            dest.writeByte((byte) (0x01));
+            dest.writeInt(rebound_source_id);
+        }
+        dest.writeString(image_url);
+        dest.writeString(image_teaser_url);
+        dest.writeParcelable(player, flags);
+        dest.writeString(created_at);
+        dest.writeString(image_400_url);
+        dest.writeString(description);
+    }
+
+    @SuppressWarnings("unused")
+    public static final Parcelable.Creator<Shot> CREATOR = new Parcelable.Creator<Shot>() {
+        @Override
+        public Shot createFromParcel(Parcel in) {
+            return new Shot(in);
+        }
+
+        @Override
+        public Shot[] newArray(int size) {
+            return new Shot[size];
+        }
+    };
 }
