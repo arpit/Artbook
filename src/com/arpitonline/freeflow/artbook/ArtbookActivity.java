@@ -84,18 +84,19 @@ public class ArtbookActivity extends DetailsCapableActivity implements
 		mDrawerList = (ListView) findViewById(R.id.left_drawer);
 		containerFrame = (FrameLayout) findViewById(R.id.frame);
 		container = (FreeFlowContainer) findViewById(R.id.container);
+		
+		container.logDebugEvents = true;
+		
 		getActionBar().setDisplayHomeAsUpEnabled(true);
 		getActionBar().setHomeButtonEnabled(true);
 		mDrawerToggle = new ActionBarDrawerToggle(this, mDrawerLayout,
 				R.drawable.ic_drawer, R.string.open_drawer,
 				R.string.close_drawer) {
 			public void onDrawerClosed(View view) {
-				// getActionBar().setTitle(mTitle);
 				invalidateOptionsMenu();
 			}
 
 			public void onDrawerOpened(View drawerView) {
-				// getActionBar().setTitle(mDrawerTitle);
 				invalidateOptionsMenu();
 			}
 		};
@@ -245,18 +246,24 @@ public class ArtbookActivity extends DetailsCapableActivity implements
 				});
 	}
 
+	
+	private boolean sourceChanged = false;
 	private void selectSource(int idx) {
 		String url = "";
 		pageIndex = 1;
+		sourceChanged = true;
 		adapter.clear();
 		switch (idx) {
 		case 0:
+			getActionBar().setTitle("Popular");
 			url = DribbbleFetch.getPopularURL(itemsPerPage, pageIndex);
 			break;
 		case 1:
+			getActionBar().setTitle("Everyone");
 			url = DribbbleFetch.getEveryoneURL(itemsPerPage, pageIndex);
 			break;
 		case 2:
+			getActionBar().setTitle("Debuts");
 			url = DribbbleFetch.getDebutsURL(itemsPerPage, pageIndex);
 			break;
 		}
@@ -267,7 +274,8 @@ public class ArtbookActivity extends DetailsCapableActivity implements
 	public void onDataLoaded(DribbbleFeed feed) {
 		hideLoading();
 		adapter.update(feed);
-		container.dataInvalidated();
+		container.dataInvalidated(sourceChanged);
+		sourceChanged = false;
 
 	}
 
