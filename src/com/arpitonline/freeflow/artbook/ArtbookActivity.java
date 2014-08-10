@@ -1,20 +1,15 @@
 package com.arpitonline.freeflow.artbook;
 
-import com.crashlytics.android.Crashlytics;
-
 import java.util.ArrayList;
 
 import android.animation.Animator;
 import android.animation.Animator.AnimatorListener;
 import android.content.Intent;
-import android.graphics.Color;
 import android.graphics.Point;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.v4.app.ActionBarDrawerToggle;
-import android.support.v4.graphics.drawable.DrawableCompat;
 import android.support.v4.widget.DrawerLayout;
-import android.util.Log;
 import android.view.Display;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -43,6 +38,7 @@ import com.comcast.freeflow.core.FreeFlowItem;
 import com.comcast.freeflow.layouts.FreeFlowLayout;
 import com.comcast.freeflow.layouts.VGridLayout;
 import com.comcast.freeflow.utils.ViewUtils;
+import com.crashlytics.android.Crashlytics;
 
 public class ArtbookActivity extends DetailsCapableActivity implements
 		OnClickListener, android.widget.AdapterView.OnItemClickListener,
@@ -165,8 +161,16 @@ public class ArtbookActivity extends DetailsCapableActivity implements
 
 		} else {
 			detailsView = (ViewGroup) LayoutInflater.from(this).inflate(
-					R.layout.shot_details, container, false);
-
+					R.layout.embedded_details, container, false);
+			
+			detailsView.findViewById(R.id.panel_close).setOnClickListener(new View.OnClickListener() {
+				
+				@Override
+				public void onClick(View v) {
+					closeDetails(true);
+				}
+			});
+			
 			detailsView.setOnClickListener(new View.OnClickListener() {
 
 				@Override

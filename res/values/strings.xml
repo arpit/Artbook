@@ -17,8 +17,18 @@
 <resources>
 
     <string name="app_name">Artbook</string>
-    <string name="about">Artbook is a demo app that shows how to use the FreeFlow UI library. Click on the link below to go to the Github page for the library</string>
-    <string name="github_link_text">Github link</string>
+    
+    <string name="about_artbook">Artbook is an open source client for Dribbble</string>
+    <string name="artbook_github_link_text">Source</string>
+    
+    <string name="about_freeflow">Artbook uses FreeFlow UI library for dynamic layouts</string>
+    <string name="freeflow_github_link_text">FreeFlow on Github</string>
+    
+    <string name="about_me">Made by Arpit Mathur</string>
+    <string name="follow_me_twitter">Follow me on Twitter</string>
+    <string name="follow_me_google_plus">Follow me on Google+</string>
+    
+    
     <string name="action_about">About</string>
     <string name="change_layout">Change Layout</string>
     <string name="open_drawer">Open Drawer</string>

@@ -48,7 +48,8 @@
             android:layout_height="wrap_content"
             android:textSize="22sp"
     		android:padding="16dp"
-            android:textColor="#ffffffff"/>
+    		android:background="#ffffffff"
+            android:textColor="@color/dribbble_pink"/>
     </LinearLayout>
 
 </android.support.v4.widget.DrawerLayout>
