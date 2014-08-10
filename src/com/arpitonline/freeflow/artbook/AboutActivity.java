@@ -1,7 +1,11 @@
 package com.arpitonline.freeflow.artbook;
 
+import com.crashlytics.android.internal.p;
+
 import android.app.Activity;
 import android.content.Intent;
+import android.content.pm.PackageInfo;
+import android.content.pm.PackageManager.NameNotFoundException;
 import android.graphics.Typeface;
 import android.net.Uri;
 import android.os.Bundle;
@@ -23,6 +27,7 @@ public class AboutActivity extends Activity {
 		setContentView(R.layout.activity_about);
 
 		final String[] links = new String[]{
+			"",
 			"https://github.com/arpit/Artbook",
 			"https://github.com/Comcast/FreeFlow",
 			"http://arpitonline.com/blog/",
@@ -31,6 +36,7 @@ public class AboutActivity extends Activity {
 		};
 		
 		final String[] titles = new String[] {
+				"Application Version",
 				"Artbook Source",
 				"Built with FreeFlow",
 				"Made by Arpit Mathur",
@@ -38,9 +44,22 @@ public class AboutActivity extends Activity {
 				"Connect on Google Plus",
 		};
 		
+		
+		PackageInfo pinfo;
+		String info;
+		try {
+			pinfo = this.getPackageManager().getPackageInfo(getPackageName(), 0);
+			info = ""+pinfo.versionName;
+		} catch (NameNotFoundException e) {
+			e.printStackTrace();
+			info = "Version info unavailable";
+		}
+		
+		
 		final String[] labels = new String[] {
-				getResources().getString(R.string.about_artbook),
-				getResources().getString(R.string.about_freeflow),
+				info,
+				getResources().getString(R.string.artbook_source_txt),
+				getResources().getString(R.string.freeflow_source_txt),
 				"Visit my blog",
 				getResources().getString(R.string.follow_me_twitter),
 				getResources().getString(R.string.follow_me_google_plus) };
@@ -88,6 +107,7 @@ public class AboutActivity extends Activity {
 			@Override
 			public void onItemClick(AdapterView<?> parent, View view,
 					int position, long id) {
+				if(position == 0) return;
 				Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri
 						.parse(links[position]));
 				startActivity(browserIntent);

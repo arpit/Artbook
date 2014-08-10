@@ -18,11 +18,9 @@
 
     <string name="app_name">Artbook</string>
     
-    <string name="about_artbook">Artbook is an open source client for Dribbble</string>
-    <string name="artbook_github_link_text">Source</string>
+    <string name="artbook_source_txt">Get the source on Github</string>
     
-    <string name="about_freeflow">Artbook uses FreeFlow UI library for dynamic layouts</string>
-    <string name="freeflow_github_link_text">FreeFlow on Github</string>
+    <string name="freeflow_source_txt">Artbook uses FreeFlow UI library for dynamic layouts. Get it on Github</string>
     
     <string name="about_me">Made by Arpit Mathur</string>
     <string name="follow_me_twitter">Follow me on Twitter</string>
