@@ -10,6 +10,7 @@ import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.v4.app.ActionBarDrawerToggle;
 import android.support.v4.widget.DrawerLayout;
+import android.util.DebugUtils;
 import android.util.Log;
 import android.view.Display;
 import android.view.Gravity;
@@ -76,7 +77,9 @@ public class ArtbookActivity extends DetailsCapableActivity implements
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		Crashlytics.start(this);
+		if(!BuildConfig.DEBUG){
+			Crashlytics.start(this);
+		}
 		setContentView(R.layout.activity_artbook);
 
 		loadingIndicator = findViewById(R.id.loading);
@@ -84,8 +87,6 @@ public class ArtbookActivity extends DetailsCapableActivity implements
 		mDrawerList = (ListView) findViewById(R.id.left_drawer);
 		containerFrame = (FrameLayout) findViewById(R.id.frame);
 		container = (FreeFlowContainer) findViewById(R.id.container);
-		
-		container.logDebugEvents = true;
 		
 		getActionBar().setDisplayHomeAsUpEnabled(true);
 		getActionBar().setHomeButtonEnabled(true);

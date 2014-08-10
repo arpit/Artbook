@@ -2,15 +2,17 @@ package com.arpitonline.freeflow.artbook;
 
 import java.util.ArrayList;
 
-import com.arpitonline.freeflow.artbook.models.Shot;
-
 import android.content.Context;
 import android.os.Bundle;
+import android.support.v4.app.NavUtils;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+
+import com.arpitonline.freeflow.artbook.models.Shot;
 
 public class DetailsActivity extends DetailsCapableActivity {
 
@@ -31,7 +33,20 @@ public class DetailsActivity extends DetailsCapableActivity {
 		pager = (ViewPager) findViewById(R.id.pages_holder);
 		pager.setAdapter(adapter);
 		pager.setCurrentItem(getIntent().getIntExtra("selectedIndex", 0));
+		
+		getActionBar().setDisplayHomeAsUpEnabled(true);
 	}
+	
+	@Override
+	public boolean onOptionsItemSelected(MenuItem item) {
+	    switch (item.getItemId()) {
+	    case android.R.id.home:
+	        NavUtils.navigateUpFromSameTask(this);
+	        return true;
+	    }
+	    return super.onOptionsItemSelected(item);
+	}
+
 
 	public class PhotosDetailsListAdapter extends PagerAdapter {
 
@@ -67,6 +82,5 @@ public class DetailsActivity extends DetailsCapableActivity {
 		public void destroyItem(ViewGroup container, int position, Object object) {
 			((ViewPager) container).removeView((View) object);
 		}
-
 	}
 }
