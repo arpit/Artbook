@@ -28,6 +28,7 @@ public class AboutActivity extends Activity {
 
 		final String[] links = new String[]{
 			"",
+			"https://dribbble.com/about",
 			"https://github.com/arpit/Artbook",
 			"https://github.com/Comcast/FreeFlow",
 			"http://arpitonline.com/blog/",
@@ -37,6 +38,7 @@ public class AboutActivity extends Activity {
 		
 		final String[] titles = new String[] {
 				"Application Version",
+				"About Dribbble.com",
 				"Artbook Source",
 				"Built with FreeFlow",
 				"Made by Arpit Mathur",
@@ -58,6 +60,7 @@ public class AboutActivity extends Activity {
 		
 		final String[] labels = new String[] {
 				info,
+				"https://dribbble.com/about",
 				getResources().getString(R.string.artbook_source_txt),
 				getResources().getString(R.string.freeflow_source_txt),
 				"Visit my blog",
