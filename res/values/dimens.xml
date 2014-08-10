@@ -3,9 +3,9 @@
     <dimen name="activity_horizontal_margin">16dp</dimen>
     <dimen name="activity_vertical_margin">16dp</dimen>
     <dimen name="side_drawer_width">240dp</dimen>
-    <dimen name="details_image_height">300dp</dimen>
+    <dimen name="details_image_height">270dp</dimen>
     <dimen name="profile_image_size">60dp</dimen>
-    <dimen name="desc_text_min_height">300dp</dimen>
+    <dimen name="desc_text_min_height">400dp</dimen>
     <dimen name="about_layout_padding_left">20dp</dimen>
 
 </resources>

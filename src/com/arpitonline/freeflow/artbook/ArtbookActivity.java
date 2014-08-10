@@ -10,6 +10,7 @@ import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.v4.app.ActionBarDrawerToggle;
 import android.support.v4.widget.DrawerLayout;
+import android.util.Log;
 import android.view.Display;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -134,10 +135,9 @@ public class ArtbookActivity extends DetailsCapableActivity implements
 		grid = new VGridLayout();
 		columnCount = getResources().getInteger(R.integer.column_count);
 		
-		
+		int itemWidth = size.x / columnCount;
 
-		VGridLayout.LayoutParams params = new VGridLayout.LayoutParams(size.x
-				/ columnCount, (int) ((size.x / columnCount) * 0.75));
+		VGridLayout.LayoutParams params = new VGridLayout.LayoutParams(itemWidth, (int) (itemWidth * 0.75));
 		grid.setLayoutParams(params);
 
 		layouts = new FreeFlowLayout[] { grid, custom };
@@ -163,6 +163,8 @@ public class ArtbookActivity extends DetailsCapableActivity implements
 			detailsView = (ViewGroup) LayoutInflater.from(this).inflate(
 					R.layout.embedded_details, container, false);
 			
+			
+			
 			detailsView.findViewById(R.id.panel_close).setOnClickListener(new View.OnClickListener() {
 				
 				@Override
@@ -179,8 +181,7 @@ public class ArtbookActivity extends DetailsCapableActivity implements
 				}
 			});
 			FrameLayout.LayoutParams fl = new FrameLayout.LayoutParams(
-					(int) ViewUtils.dipToPixels(this, 600),
-
+					2*itemWidth,
 					FrameLayout.LayoutParams.WRAP_CONTENT);
 			fl.gravity = Gravity.RIGHT;
 			detailsView.setLayoutParams(fl);
@@ -290,6 +291,12 @@ public class ArtbookActivity extends DetailsCapableActivity implements
 				currLayoutIndex = 0;
 			}
 			container.setLayout(layouts[currLayoutIndex]);
+			if(layouts[currLayoutIndex] == grid){
+				Log.d(TAG, "Grid ItemWidth: "+grid.getItemWidth());
+			}
+			
+			
+			
 			item.setIcon(layoutIcons[currLayoutIndex]);
 
 			break;
@@ -323,15 +330,6 @@ public class ArtbookActivity extends DetailsCapableActivity implements
 		areDetailsShowing = true;
 		
 		final int w = size.x - detailsView.getWidth();
-
-		if(container.getLayout() == grid){
-			grid = (VGridLayout)container.getLayout();
-			grid.setLayoutParams( new VGridLayout.LayoutParams(w/2, 3*(w/2)/4));
-			
-		}
-		else{
-			
-		}
 		
 		ViewGroup.LayoutParams p = container.getLayoutParams();
 		p.width = w;
@@ -355,18 +353,6 @@ public class ArtbookActivity extends DetailsCapableActivity implements
 			return;
 		}
 		areDetailsShowing = false;
-		
-		if(container.getLayout() == grid){
-			grid = (VGridLayout)container.getLayout();
-			VGridLayout.LayoutParams params = new VGridLayout.LayoutParams(size.x
-					/ columnCount, (int) ((size.x / columnCount) * 0.75));
-			grid.setLayoutParams(params);
-			
-		}
-		else{
-			
-		}
-		
 		
 		ViewGroup.LayoutParams p = container.getLayoutParams();
 		p.width = size.x;

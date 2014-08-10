@@ -1,34 +1,32 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent" 
-    android:background="#111"
-   >
+    android:layout_height="match_parent"
+    android:background="#111" >
 
     <TextView
         android:id="@+id/shot_title_view"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content" 
+        android:layout_height="wrap_content"
+        android:padding="10dp"
         android:textColor="#fff"
-        android:padding="20dp"
-        android:textSize="22sp"
-        />
+        android:textSize="18sp" />
 
     <TextView
+        android:id="@+id/panel_close"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentRight="true"
-        android:text="Close" 
         android:layout_alignBaseline="@+id/shot_title_view"
-        android:id="@+id/panel_close"
-        android:padding="20dp"
-        android:textSize="22sp"
-        android:textColor="#fff"/>
+        android:layout_alignParentRight="true"
+        android:padding="10dp"
+        android:text="Close"
+        android:textColor="#fff"
+        android:textSize="18sp" />
 
     <include
-        android:layout_below="@id/shot_title_view"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:layout_below="@id/shot_title_view"
         layout="@layout/shot_details" />
 
 </RelativeLayout>
