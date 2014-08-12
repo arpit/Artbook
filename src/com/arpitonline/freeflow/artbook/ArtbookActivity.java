@@ -133,8 +133,20 @@ public class ArtbookActivity extends DetailsCapableActivity implements
 		display.getSize(size);
 
 		// findViewById(R.id.load_more).setOnClickListener(this);
-		custom = new DribbbleQuiltLayout();
-		grid = new VGridLayout();
+		custom = new DribbbleQuiltLayout(){
+			@Override
+			public int getContentHeight() {
+				int ht = super.getContentHeight();
+				return ht+200;
+			}
+		};
+		grid = new VGridLayout(){
+			@Override
+			public int getContentHeight() {
+				int ht = super.getContentHeight();
+				return ht+200;
+			}
+		};
 		columnCount = getResources().getInteger(R.integer.column_count);
 		
 		int itemWidth = size.x / columnCount;
