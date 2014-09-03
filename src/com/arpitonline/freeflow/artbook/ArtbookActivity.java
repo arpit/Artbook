@@ -53,6 +53,7 @@ public class ArtbookActivity extends DetailsCapableActivity implements
 	private FreeFlowContainer container;
 	private VGridLayout grid;
 	private DribbbleQuiltLayout custom;
+	private Shot selectedShot;
 
 	private DrawerLayout mDrawerLayout;
 	private ListView mDrawerList;
@@ -294,7 +295,16 @@ public class ArtbookActivity extends DetailsCapableActivity implements
 
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
-		getMenuInflater().inflate(R.menu.artbook, menu);
+		
+		if(areDetailsShowing){
+			getMenuInflater().inflate(R.menu.main_showing_details, menu);
+		}
+		else{
+			getMenuInflater().inflate(R.menu.artbook, menu);
+		}
+		
+		
+		
 		return true;
 	}
 	
@@ -302,6 +312,10 @@ public class ArtbookActivity extends DetailsCapableActivity implements
 
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
+		boolean b = super.onOptionsItemSelected(item);
+		if(b){
+			return true;
+		}
 		if (mDrawerToggle.onOptionsItemSelected(item)) {
 			return true;
 		}
@@ -367,6 +381,8 @@ public class ArtbookActivity extends DetailsCapableActivity implements
 		.setInterpolator(new EaseInOutQuintInterpolator());
 		
 		
+		invalidateOptionsMenu();
+		
 	}
 
 	private void closeDetails(boolean withAnimation) {
@@ -414,7 +430,7 @@ public class ArtbookActivity extends DetailsCapableActivity implements
 			detailsView.setTranslationY(0);
 			detailsView.animate().setListener(null);
 		}
-		
+		invalidateOptionsMenu();
 		
 	}
 
@@ -432,9 +448,11 @@ public class ArtbookActivity extends DetailsCapableActivity implements
 
 	boolean areDetailsShowing = false;
 
+	
+	
 	@Override
 	public void onItemClick(AbsLayoutContainer parent, FreeFlowItem proxy) {
-		Shot s = (Shot) adapter.getSection(0).getDataAtIndex(proxy.itemIndex);
+		selectedShot = (Shot) adapter.getSection(0).getDataAtIndex(proxy.itemIndex);
 		if (newact) {
 			Intent intent = new Intent(this, DetailsActivity.class);
 			ArrayList<Shot> shots = new ArrayList<Shot>();
@@ -454,7 +472,7 @@ public class ArtbookActivity extends DetailsCapableActivity implements
 
 		else {
 			openDetails();
-			renderShot(detailsView, s);
+			renderShot(detailsView, selectedShot);
 		}
 
 	}
@@ -467,6 +485,11 @@ public class ArtbookActivity extends DetailsCapableActivity implements
 		}
 		super.onBackPressed();
 
+	}
+
+	@Override
+	public Shot getSelectedShot() {
+		return this.selectedShot;
 	}
 
 }

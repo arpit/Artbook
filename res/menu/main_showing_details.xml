@@ -1,0 +1,22 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android" >
+
+    <item
+        android:id="@+id/action_change_layout"
+        android:icon="@drawable/ic_quilt"
+        android:orderInCategory="100"
+        android:showAsAction="always"
+        android:title="@string/change_layout"/>
+    <item
+        android:id="@+id/share"
+        android:icon="@drawable/ic_action_share"
+        android:orderInCategory="100"
+        android:showAsAction="always"
+        android:title="@string/share"/>
+    <item
+        android:id="@+id/open_in_browser"
+        android:icon="@drawable/link"
+        android:orderInCategory="100"
+        android:showAsAction="always"
+        android:title="@string/open_in_browser"/>
+
+</menu>
