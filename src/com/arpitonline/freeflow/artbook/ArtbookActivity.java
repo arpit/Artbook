@@ -312,11 +312,11 @@ public class ArtbookActivity extends DetailsCapableActivity implements
 
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
-		boolean b = super.onOptionsItemSelected(item);
-		if(b){
+		if (mDrawerToggle.onOptionsItemSelected(item)) {
 			return true;
 		}
-		if (mDrawerToggle.onOptionsItemSelected(item)) {
+		boolean b = super.onOptionsItemSelected(item);
+		if(b){
 			return true;
 		}
 		switch (item.getItemId()) {
